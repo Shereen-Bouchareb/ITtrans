@@ -1,51 +1,16 @@
+require('dotenv').config();    // Load environment variables from .env file
+
 const WebSocket = require('ws');
+const authController = require('./Authentication/control');
 
-const app = require('./app');
-// instance express pour gerer les requette http .
-const db = require ('./modules/load_database'); // le fichier JS(not json)
+// Retrieve secret key from environment variable
+const secretKey = process.env.JWT_SECRET_KEY;
 
-// creation du serveur webSocket et l'associe au serveur http dans le meme port 
+const wss = new WebSocket.Server({ port: 8080 });
 
-const wss = new WebSocket.Server( {server : app.listen(8080) } );
+wss.on('connection', (ws, req) => {
+  // Pass the secret key to the authentication controller
+  authController.handleConnection(ws, req, secretKey);
+});
 
-
-let mp3PlayerClient = null;
-
-
-// middlewares
-wss.on('connection' , (Socket) => { 
-  Socket.on('message' , (data)=> {
-// data with type JSON String 
-const { latitude , longitude} = JSON.parse(data);
-
-const station = db.findStation(latitude , longitude);
-
-if (station){
-  if (mp3PlayerClient){
-mp3PlayerClient.send(station.name);
-  }
-
-}else{
-// station == undefined (null)
-console.log("station is not founded ");
-}
-
-  });
-
-  if (Socket.upgradeReq.url === '/mp3Player') {
-    mp3PlayerClient = Socket;
-  }
-
-  // Handle mp3Player client disconnection
-  Socket.on('close', () => {
-    if (Socket === mp3PlayerClient) {
-      mp3PlayerClient = null;
-    }
-  });
-
- });
-
- console.log('Serveur en écoute sur le port 8080');
-
-
-
+console.log('WebSocket server is listening on port 8080');
