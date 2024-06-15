@@ -1,20 +1,19 @@
 const WebSocket = require('ws');
 const fetch = require('node-fetch');
 
-// Replace with your actual login endpoint and credentials
 const loginEndpoint = 'http://localhost:3000/login';
 const username = 'user1';
 const password = 'p123';
 
 async function loginAndConnect() {
   try {
-    // Step 1: Log in and obtain the token
+    // sending http rqst
     const response = await fetch(loginEndpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
     });
-
+        // receiving the http response (token) 
     const data = await response.json();
 
     if (!response.ok) {
@@ -25,9 +24,9 @@ async function loginAndConnect() {
     const token = data.token;
     console.log('Obtained token:', token);
 
-    // Step 2: Use the token to authenticate the WebSocket connection
+    // connecting to the server using the token 
     const ws = new WebSocket('ws://localhost:8080', token);
-
+// ------------the rest of your code 
     ws.on('open', () => {
       console.log('Connected to server');
 
