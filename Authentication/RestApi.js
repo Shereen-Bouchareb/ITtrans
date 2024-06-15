@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 // Connect to the SQLite database
 const db = new sqlite3.Database('users.db');
 
-// HTTP endpoint to handle user login
+// HTTP endpoint to handle user login (((/login is the endpoint in the api )))
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
@@ -23,14 +23,14 @@ app.post('/login', (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // If user found, compare passwords using bcrypt
+    // if user exst, compare passwords 
     bcrypt.compare(password, user.password, (err, result) => {
       if (err || !result) {
         return res.status(401).json({ message: 'Invalid credentials' });
       }
 
       // User authenticated successfully, generate JWT
-      const payload = { username }; // Add more user details if needed
+      const payload = { username }; // we can add some info 
       const token = jwtDriver.generateToken(payload);
 
       res.json({ token });
