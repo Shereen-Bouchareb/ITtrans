@@ -19,27 +19,42 @@ db.serialize(() => {
 
   // Function to insert a user
   const insertUser = (username, password) => {
-    const saltRounds = 10;
-    bcrypt.hash(password, saltRounds, (err, hash) => {
-      if (err) throw err;
-      db.run(`INSERT INTO users (username, password) VALUES (?, ?)`, [username, hash], (err) => {
-        if (err) {
-          console.error(`Error inserting user ${username}:`, err.message);
-        } else {
-          console.log(`User ${username} inserted successfully`);
-        }
+    return new Promise((resolve, reject) => {
+      const saltRounds = 10;
+      bcrypt.hash(password, saltRounds, (err, hash) => {
+        if (err) return reject(err);
+        
+        db.run(`INSERT INTO users (username, password) VALUES (?, ?)`, [username, hash], (err) => {
+          if (err) {
+            console.error(`Error inserting user ${username}:`, err.message);
+            return reject(err);
+          } else {
+            console.log(`User ${username} inserted successfully`);
+            resolve();
+          }
+        });
       });
     });
   };
 
   // Insert each user
-  users.forEach(user => insertUser(user.username, user.password));
-
-  // Close the database connection after all insertions are complete
-  db.close((err) => {
-    if (err) {
-      return console.error(err.message);
+  const insertUsers = async () => {
+    for (const user of users) {
+      try {
+        await insertUser(user.username, user.password);
+      } catch (err) {
+        console.error('Error:', err.message);
+      }
     }
-    console.log('Database connection closed');
-  });
+
+    // Close the database connection after all insertions are complete
+    db.close((err) => {
+      if (err) {
+        return console.error('Error closing the database:', err.message);
+      }
+      console.log('Database connection closed');
+    });
+  };
+
+  insertUsers();
 });

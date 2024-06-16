@@ -1,5 +1,5 @@
 const express = require('express');
-const jwtDriver = require('../drivers/jwtDriver');
+const jwtDriver = require('./driverjwt');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const sqlite3 = require('sqlite3').verbose();
@@ -17,16 +17,19 @@ app.post('/login', (req, res) => {
   // Query the database to find the user
   db.get('SELECT * FROM users WHERE username = ?', [username], (err, user) => {
     if (err) {
+      console.log(err);
       return res.status(500).json({ message: 'Internal Server Error' });
     }
+    
     if (!user) {
+      console.log(user);
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     // if user exst, compare passwords 
     bcrypt.compare(password, user.password, (err, result) => {
       if (err || !result) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+        return res.status(401).json({ message: 'Invalid credentials 404' });
       }
 
       // User authenticated successfully, generate JWT
