@@ -1,0 +1,20 @@
+server ws : onopen , on message , onclose , on err 
+cotee client : same 
+
+config file(sqlLite) : hashee , contient des key (token) , cachee dans le client et il est le meme fichier li 3ndiii,
+contient 2 tables, table1 configuration map (key , value) ex (port , 8080) , table2 client (key , name , expired at)
+
+ les callbacks permettent au programme de continuer à s'exécuter pendant que la requête est traitée.
+
+ resolve:
+
+Called when the asynchronous operation completes successfully.
+In this case, it is called after successfully inserting a port into the ports table.
+resolve() transitions the promise from the "pending" state to the "fulfilled" state.
+
+
+reject:
+
+Called when the asynchronous operation fails or encounters an error.
+In this case, it is called if there is an error during the insertion into the ports table.
+reject(err) transitions the promise from the "pending" state to the "rejected" state and passes the error as the reason for rejection.
