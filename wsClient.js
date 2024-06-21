@@ -1,14 +1,16 @@
+console.log('starting ...');
+
 const WebSocket = require('ws');
 
-const ws = new WebSocket('ws://localhost:8080', {
+const ws = new WebSocket('ws://localhost:8081/ws', {
   headers: {
     'Sec-WebSocket-Protocol': 'Pt@1'
   }
 });
-
+console.log('sending rqst successfully  ...');
 ws.on('open', () => {
   console.log('Connected to server');
-});
+
 
 ws.on('message', (data) => {
   console.log('Received:', data);
@@ -19,5 +21,9 @@ ws.on('close', (code, reason) => {
 });
 
 ws.on('error', (error) => {
+  console.log('error');
   console.error('WebSocket error:', error.message);
+});
+
+
 });

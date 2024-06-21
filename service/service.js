@@ -1,4 +1,4 @@
-const dbDriver = require('./dbDriver');
+const dbDriver = require('../driver/driver');
 
 exports.authenticate = (token, callback) => {
   dbDriver.getClientByToken(token, (err, client) => {

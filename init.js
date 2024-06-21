@@ -16,9 +16,8 @@ db.serialize(() => {
   // Table des ports
   db.run(`CREATE TABLE IF NOT EXISTS ports (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    token TEXT UNIQUE NOT NULL,
-    port INTEGER NOT NULL,
-    FOREIGN KEY (token) REFERENCES clients(token)
+    portKey TEXT UNIQUE NOT NULL,
+    value INTEGER NOT NULL
   )`);
 
   // Définir les clients à ajouter
@@ -29,7 +28,7 @@ db.serialize(() => {
 
   // Définir les ports à ajouter
   const ports = [
-    { token: 'token1', port: 8080 }
+    { portKey: 'server', value: 8081 }
   ];
 
   // Fonction pour insérer un client
@@ -49,15 +48,15 @@ db.serialize(() => {
   };
 
   // Fonction pour insérer un port
-  const insertPort = (token, port) => {
+  const insertPort = (portKey, value) => {
     return new Promise((resolve, reject) => {
-      db.run(`INSERT INTO ports (token, port) VALUES (?, ?)`,
-        [token, port], (err) => {
+      db.run(`INSERT INTO ports (portKey, value) VALUES (?, ?)`,
+        [portKey, value], (err) => {
           if (err) {
-            console.error(`Error inserting port for token ${token}:`, err.message);
+            console.error(`Error inserting port  ${portKey}:`, err.message);
             return reject(err);
           } else {
-            console.log(`Port ${port} for token ${token} inserted successfully`);
+            console.log(`Port ${portKey} inserted successfully`);
             resolve();
           }
         });
@@ -72,7 +71,7 @@ db.serialize(() => {
       }
 
       for (const port of ports) {
-        await insertPort(port.token, port.port);
+        await insertPort(port.portKey, port.value);
       }
     } catch (err) {
       console.error('Error during insertion:', err.message);
