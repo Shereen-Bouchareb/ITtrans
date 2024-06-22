@@ -7,18 +7,17 @@ const ws = new WebSocket('ws://localhost:8081/ws', {
     'Sec-WebSocket-Protocol': 'Pt@1'
   }
 });
+
 console.log('sending rqst successfully  ...');
+
 ws.on('open', () => {
   console.log('Connected to server');
-
+});
 
 ws.on('message', (data) => {
   console.log('Received:', data);
 });
 
-ws.on('close', (code, reason) => {
-  console.log('Connection closed:', code, reason);
-});
 
 ws.on('error', (error) => {
   console.log('error');
@@ -26,4 +25,11 @@ ws.on('error', (error) => {
 });
 
 
-});
+//ws.on('close', (code, reason) => {
+  //console.log('Connection closed:', code, reason);
+ // if (reason) {
+ //   console.log('Reason:', reason.toString());
+ // }
+//});
+
+

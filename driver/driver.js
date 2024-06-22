@@ -13,11 +13,11 @@ exports.addClient = (clientName, token, expiresAt, callback) => {
 };
 
 exports.getPortByKey = (key, callback) => {
-  db.get('SELECT * FROM ports WHERE key = ?', [key], (err, row) => {
+  db.get('SELECT * FROM config WHERE key = ?', [key], (err, row) => {
     callback(err, row);
   });
 };
 
 exports.addPort = (key, value, callback) => {
-  db.run('INSERT INTO ports (key, value) VALUES (?, ?)', [key, value], callback);
+  db.run('INSERT INTO config (key, value) VALUES (?, ?)', [key, value], callback);
 };

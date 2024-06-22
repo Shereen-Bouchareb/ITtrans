@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 
 // Créer ou ouvrir la base de données SQLite
-const db = new sqlite3.Database('clients.db');
+const db = new sqlite3.Database('database.db');
 
 // Initialiser la base de données avec des tables pour les clients et les ports
 db.serialize(() => {

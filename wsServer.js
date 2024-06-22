@@ -1,19 +1,36 @@
-console.log('starting ...');
+console.log('Starting WebSocket server...');
 
 const WebSocket = require('ws');
 const authService = require('./service/service');
 
+const serverPort = D ;
+const wss = new WebSocket.Server({  port :serverPort});
+console.log('WebSocket server created on port 8081');
 
-const wss = new WebSocket.Server({ port: 8081});
-console.log('creating ws server ');
 wss.on('connection', (ws, req) => {
-  console.log('inside the cnx waiting ');
+
+console.log ('the url of the connection : ' , rep.url);
+
+
+  if (req.url !== '/ws') {  // Check the URL path
+    ws.close(1008, 'Invalid URL path');
+    console.error('Connection rejected: Invalid URL path');
+    return;
+  }
+
+  console.log('New connection established');
   const token = req.headers['sec-websocket-protocol'];
-  console.log('after having the token from the rqst  '); 
+  console.log('Received token:', token);
+
+  if (!token) {
+    ws.close(1008, 'Token is missing');
+    console.error('Connection rejected: Token is missing');
+    return;
+  }
 
   try {
     authService.authenticate(token, (err, client) => {
-      console.log('calling the authenticate method ');
+      console.log('Authenticating token');
       if (err) {
         ws.close(1008, 'Invalid token');
         console.error('Connection rejected:', err.message);
@@ -23,24 +40,24 @@ wss.on('connection', (ws, req) => {
       console.log('Client authenticated:', client);
       ws.send('Authentication successful');
 
-      // Handle WebSocket events here
       ws.on('message', (message) => {
         console.log('Received message:', message);
-        // 
       });
 
       ws.on('close', (code, reason) => {
         console.log('Connection closed:', code, reason);
-        // 
       });
 
       ws.on('error', (error) => {
         console.error('WebSocket error:', error.message);
-        //
       });
     });
   } catch (error) {
     ws.close(1011, 'Internal server error');
     console.error('Internal server error:', error.message);
   }
+});
+
+wss.on('error', (error) => {
+  console.error('WebSocket server error:', error.message);
 });

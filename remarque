@@ -18,3 +18,16 @@ reject:
 Called when the asynchronous operation fails or encounters an error.
 In this case, it is called if there is an error during the insertion into the ports table.
 reject(err) transitions the promise from the "pending" state to the "rejected" state and passes the error as the reason for rejection.
+
+
+ws.on method is used to attach event listeners to various events 
+ws.on('message', )
+ws.on('close'.)
+ws.on('error', )
+ws.on('onopen'. )
+
+
+
+the other : 
+ws.send // to send data the client 
+ws.close // to close that cnx
