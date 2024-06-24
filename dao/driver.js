@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 
-const db = new sqlite3.Database('clients.db');
+const db = new sqlite3.Database('../dao/database');
 
 exports.getClientByToken = (token, callback) => {
   db.get('SELECT * FROM clients WHERE token = ?', [token], (err, row) => {
@@ -8,8 +8,8 @@ exports.getClientByToken = (token, callback) => {
   });
 };
 
-exports.addClient = (clientName, token, expiresAt, callback) => {
-  db.run('INSERT INTO clients (clientName, token, expiresAt) VALUES (?, ?, ?)', [clientName, token, expiresAt], callback);
+exports.addClient = (clientName, token, expiredAt, callback) => {
+  db.run('INSERT INTO clients (clientName, token, expiredAt) VALUES (?, ?, ?)', [clientName, token, expiredAt], callback);
 };
 
 exports.getPortByKey = (key, callback) => {

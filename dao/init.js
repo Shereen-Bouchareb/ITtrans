@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 
 // Créer ou ouvrir la base de données SQLite
-const db = new sqlite3.Database('clients.db');
+const db = new sqlite3.Database('dao/database.db');
 
 // Initialiser la base de données avec des tables pour les clients et les ports
 db.serialize(() => {
@@ -22,22 +22,22 @@ db.serialize(() => {
 
   // Définir les clients à ajouter
   const clients = [
-    { clientName: 'Tablet', token: 'Tablet', expiresAt: Date.now() + 86400000 }, // expires in 1 day
-    { clientName: 'Geolocation', token: 'Geolocation', expiresAt: Date.now() + 86400000 }
-    { clientName: 'PaymentTerminal', token: 'PaymentTerminal', expiresAt: Date.now() + 86400000 }
-    { clientName: 'Display', token: 'Display', expiresAt: Date.now() + 86400000 }
+    { clientName: 'Tablet', token: 'Tablet', expiredAt: Date.now() + 86400000 }, // expires in 1 day
+    { clientName: 'Geolocation', token: 'Geolocation', expiredAt: Date.now() + 86400000 },
+    { clientName: 'PaymentTerminal', token: 'PaymentTerminal', expiredAt: Date.now() + 86400000 },
+    { clientName: 'Display', token: 'Display', expiredAt: Date.now() + 86400000 }
   ];
 
   // Définir les ports à ajouter
   const config = [
-    { key: 'server_port', value: 8081 }
+    { key: 'serverPort', value: 9999 }
   ];
 
   // Fonction pour insérer un client
-  const insertClient = (clientName, token, expiresAt) => {
+  const insertClient = (clientName, token, expiredAt) => {
     return new Promise((resolve, reject) => {
       db.run(`INSERT INTO clients (clientName, token, expiredAt) VALUES (?, ?, ?)`,
-        [clientName, token, expiresAt], (err) => {
+        [clientName, token, expiredAt], (err) => {
           if (err) {
             console.error(`Error inserting client ${clientName}:`, err.message);
             return reject(err);
@@ -69,11 +69,11 @@ db.serialize(() => {
   const insertData = async () => {
     try {
       for (const client of clients) {
-        await insertClient(client.clientName, client.token, client.expiresAt);
+        await insertClient(client.clientName, client.token, client.expiredAt);
       }
 
-      for (const port of ports) {
-        await insertPort(port.portKey, port.value);
+      for (const port of config) {
+        await insertPort(port.key, port.value);
       }
     } catch (err) {
       console.error('Error during insertion:', err.message);

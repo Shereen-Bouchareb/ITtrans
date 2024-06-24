@@ -1,0 +1,16 @@
+/* Your existing CSS styles can go here */
+.container {
+    text-align: center;
+}
+
+.message-window, .content-window {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    max-width: 300px;
+    display: inline-block;
+}
+
+.message-window h2, .content-window h2 {
+    margin-top: 0;
+}
