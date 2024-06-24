@@ -1,4 +1,4 @@
-// this is the code of the gps that send data to the server each 2 seconds 
+// forraouf to test , this is the code of the gps that send data to the server each 2 seconds 
 const WebSocket = require('ws');
 
 const ws = new WebSocket('ws://localhost:9999/ws');
