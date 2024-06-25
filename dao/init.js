@@ -22,10 +22,10 @@ db.serialize(() => {
 
   // Définir les clients à ajouter
   const clients = [
-    { clientName: 'Tablet', token: 'Tablet', expiredAt: Date.now() + 86400000 }, // expires in 1 day
-    { clientName: 'Geolocation', token: 'Geolocation', expiredAt: Date.now() + 86400000 },
-    { clientName: 'PaymentTerminal', token: 'PaymentTerminal', expiredAt: Date.now() + 86400000 },
-    { clientName: 'Display', token: 'Display', expiredAt: Date.now() + 86400000 }
+    { clientName: 'Tablet', token: 'Tablet', expiredAt: Date.now() + 864000000 }, // expires in 1 day
+    { clientName: 'Geolocation', token: 'Geolocation', expiredAt: Date.now() + 864000000 },
+    { clientName: 'PaymentTerminal', token: 'PaymentTerminal', expiredAt: Date.now() + 864000000 },
+    { clientName: 'Display', token: 'Display', expiredAt: Date.now() + 864000000 }
   ];
 
   // Définir les ports à ajouter

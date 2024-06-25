@@ -29,6 +29,7 @@ dao.getValueByKey('serverPort')
                    clients.set(client.clientName , ws);
 
                     handleMessage(parsedMessage);
+                    
                 } catch (err) {
                     ws.close(1008, err.message);
                     console.error('Connection rejected:', err.message);
@@ -103,7 +104,7 @@ dao.getValueByKey('serverPort')
             'Tablet': ['driving'],
             'Geolocation': ['geolocation'],
             'PaymentTerminal': [], 
-            'Display': ['none']
+            'Display': ['login']
         };
     
         return compatibility[clientName] && compatibility[clientName].includes(messageType);
