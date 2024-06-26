@@ -16,7 +16,7 @@ body {
 
 .message-box {
     background-color: #2a2929; /* Slightly lighter dark color for the box */
-    border: 2px solid #fbff00;
+    border: 2px solid #ef9cc8;
     border-radius: 10px;
     padding: 60px; /* Increased padding for a larger box */
     width: 600px; /* Increased width for a larger box */
@@ -24,7 +24,7 @@ body {
 }
 
 .message-box h1 {
-    color: #fbff00;
+    color: #ef9cc8;
 }
 
 .message-box p {
@@ -39,7 +39,7 @@ button {
     font-weight: bold; /* Make text bold */
     color: #000000; /* Set text color to black */
     cursor: pointer;
-    background-color: #fbff00;
+    background-color: #ef9cc8;
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s;
@@ -124,7 +124,7 @@ input[readonly] {
     padding: 10px 20px; /* Smaller padding for the send button */
     font-size: 18px; /* Smaller font size for the send button */
     cursor: pointer;
-    background-color: #fbff00;
+    background-color: #ef9cc8;
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s;

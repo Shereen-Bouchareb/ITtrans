@@ -19,7 +19,7 @@ dao.getValueByKey('serverPort')
                 return;
             }
             console.log('New connection established');
-            ws.send('to client: Connection successful');
+            ws.send('establishing connection');
 
             ws.on('message', async (message) => {
                 try {
@@ -123,6 +123,7 @@ const CLIENT_GEOLOCATION = 'Geolocation';
 const DRIVING_TYPE_CALIBRATE = 'calibrate';
 const DRIVING_TYPE_START = 'start';
 const DRIVING_TYPE_FINISH = 'finish';
+const DRIVING_TYPE_INITIATE  = 'INITIATE';
 
 function handleMessage(message) {
     switch (message.type) {
@@ -154,7 +155,7 @@ function handleGeolocationMessage(message) {
 
 function handleDrivingMessage(message) {
     const content = message.content;
-    if ([DRIVING_TYPE_CALIBRATE, DRIVING_TYPE_START, DRIVING_TYPE_FINISH].includes(content.driving_type)) {
+    if ([DRIVING_TYPE_CALIBRATE, DRIVING_TYPE_START, DRIVING_TYPE_FINISH , DRIVING_TYPE_INITIATE] .includes(content.driving_type)) {
         sendMessage(MESSAGE_TYPE_DRIVING, content, [CLIENT_DISPLAY]);
       console.log('handling tablet msg');
     }

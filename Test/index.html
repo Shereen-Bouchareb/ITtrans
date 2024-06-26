@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Client</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>WebSocket Client</h1>
+    <label for="serverUrl">WebSocket Server URL:</label>
+    <input type="text" id="serverUrl" placeholder="ws://localhost:9999/ws" value="ws://localhost:9999/ws"><br><br>
+    
+    <label for="jsonMessage">JSON Message:</label><br>
+    <textarea id="jsonMessage" rows="10" cols="50">{
+    "sender": "",
+    "token": "",
+    "type": "",
+    "timestamp": 1655410800000,
+    "content": {
+        "driving_type": "",
+        "position": { "type": "", "name": "" }
+    }
+}</textarea><br><br>
+    
+    <button onclick="sendMessage()">Send</button>
+    
+    <h2>Log:</h2>
+    <pre id="log"></pre>
+
+    <script src="app.js"></script>
+</body>
+</html>

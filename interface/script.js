@@ -1,205 +1,155 @@
 document.getElementById('create-message-btn').addEventListener('click', function() {
-    createModal();
+    openModalInNewWindow();
 });
 
-function createModal() {
-    const modal = document.createElement('div');
-    modal.className = 'modal';
+function openModalInNewWindow() {
+    const modalWindow = window.open("", "ModalWindow", "width=600,height=400");
 
-    const modalContent = document.createElement('div');
-    modalContent.className = 'modal-content';
+    if (modalWindow) {
+        // Create the modal content in the new window
+        modalWindow.document.write(`
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Modal</title>
+                <link rel="stylesheet" href="styles.css">
+            </head>
+            <body>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="submit" class="send-message-btn">Send Message</button>
+                        <span class="close-btn">&times;</span>
+                    </div>
+                    <form class="message-form">
+                        <label>Token:</label>
+                        <select name="token">
+                            <option value="driving">driving</option>
+                            <option value="geolocation">geolocation</option>
+                            <option value="PaymentTerminal">PaymentTerminal</option>
+                            <option value="Display">Display</option>
+                        </select>
+                        <label>Timestamp:</label>
+                        <input name="timestamp" type="text" readonly value="${new Date().toISOString()}">
+                        <label>Message Type:</label>
+                        <select name="message-type">
+                            <option value="driving">driving</option>
+                            <option value="geolocation">geolocation</option>
+                            <option value="PaymentTerminal">PaymentTerminal</option>
+                            <option value="Display">Display</option>
+                        </select>
+                        <button type="button" onclick="handleContentFields()">Content</button>
+                    </form>
+                </div>
+                <script>
+                    document.querySelector('.close-btn').addEventListener('click', function() {
+                        window.close();
+                    });
 
-    const modalHeader = document.createElement('div');
-    modalHeader.className = 'modal-header';
+                    document.querySelector('.send-message-btn').addEventListener('click', function() {
+                        const tokenSelect = document.querySelector('select[name="token"]');
+                        const messageTypeSelect = document.querySelector('select[name="message-type"]');
+                        const timestampInput = document.querySelector('input[name="timestamp"]');
+                        const form = document.querySelector('form');
+                        const token = tokenSelect.value;
+                        const messageType = messageTypeSelect.value;
+                        const timestamp = timestampInput.value;
+                        sendText(token, messageType, timestamp, form);
+                    });
 
-    const sendButton = document.createElement('button');
-    sendButton.type = 'submit';
-    sendButton.innerText = 'Send Message';
-    sendButton.className = 'send-message-btn';
-    modalHeader.appendChild(sendButton);
+                    function handleContentFields() {
+                        const form = document.querySelector('form');
+                        const messageTypeSelect = document.querySelector('select[name="message-type"]');
+                        const messageType = messageTypeSelect.value;
 
-    const closeButton = document.createElement('span');
-    closeButton.className = 'close-btn';
-    closeButton.innerHTML = '&times;';
-    closeButton.onclick = function() {
-        modal.remove();
-    };
-    modalHeader.appendChild(closeButton);
+                        // Remove existing content fields if any
+                        const existingFields = form.querySelectorAll('.content-field');
+                        existingFields.forEach(field => field.remove());
 
-    modalContent.appendChild(modalHeader);
+                        if (messageType === 'geolocation') {
+                            addGeolocationFields(form);
+                        } else if (messageType === 'driving') {
+                            addDrivingFields(form);
+                        }
+                    }
 
-    const form = document.createElement('form');
-    form.className = 'message-form';
+                    function addGeolocationFields(form) {
+                        addField(form, 'Altitude:', 'altitude');
+                        addField(form, 'Longitude:', 'longitude');
+                        addSelect(form, 'Position Type:', 'positionType', ['station', 'interstation']);
+                        addField(form, 'Position Name:', 'positionName');
+                    }
 
-    const tokenLabel = document.createElement('label');
-    tokenLabel.innerText = 'Token:';
-    form.appendChild(tokenLabel);
+                    function addDrivingFields(form) {
+                        addSelect(form, 'Driving Type:', 'drivingType', ['calibrate', 'start', 'finish']);
+                        addSelect(form, 'Position Type:', 'positionType', ['station', 'interstation']);
+                        addField(form, 'Position Name:', 'positionName');
+                    }
 
-    const tokenSelect = document.createElement('select');
-    tokenSelect.name = 'token';
-    ['driving', 'geolocation', 'PaymentTerminal', 'Display'].forEach(type => {
-        const option = document.createElement('option');
-        option.value = type;
-        option.innerText = type;
-        tokenSelect.appendChild(option);
-    });
-    form.appendChild(tokenSelect);
+                    function addField(form, label, name) {
+                        const fieldLabel = document.createElement('label');
+                        fieldLabel.innerText = label;
+                        fieldLabel.className = 'content-field';
+                        form.appendChild(fieldLabel);
 
-    const timestampLabel = document.createElement('label');
-    timestampLabel.innerText = 'Timestamp:';
-    form.appendChild(timestampLabel);
+                        const fieldInput = document.createElement('input');
+                        fieldInput.name = name;
+                        fieldInput.type = 'text';
+                        fieldInput.className = 'content-field';
+                        form.appendChild(fieldInput);
+                    }
 
-    const timestampInput = document.createElement('input');
-    timestampInput.name = 'timestamp';
-    timestampInput.type = 'text';
-    timestampInput.readOnly = true;
-    timestampInput.value = new Date().toISOString();
-    form.appendChild(timestampInput);
+                    function addSelect(form, label, name, options) {
+                        const selectLabel = document.createElement('label');
+                        selectLabel.innerText = label;
+                        selectLabel.className = 'content-field';
+                        form.appendChild(selectLabel);
 
-    const messageTypeLabel = document.createElement('label');
-    messageTypeLabel.innerText = 'Message Type:';
-    form.appendChild(messageTypeLabel);
+                        const select = document.createElement('select');
+                        select.name = name;
+                        select.className = 'content-field';
+                        options.forEach(optionText => {
+                            const option = document.createElement('option');
+                            option.value = optionText;
+                            option.innerText = optionText;
+                            select.appendChild(option);
+                        });
+                        form.appendChild(select);
+                    }
 
-    const messageTypeSelect = document.createElement('select');
-    messageTypeSelect.name = 'message-type';
-    ['driving', 'geolocation', 'PaymentTerminal', 'Display'].forEach(type => {
-        const option = document.createElement('option');
-        option.value = type;
-        option.innerText = type;
-        messageTypeSelect.appendChild(option);
-    });
-    form.appendChild(messageTypeSelect);
+                    function sendText(token, messageType, timestamp, form) {
+                        // Construct a msg object containing the data the server needs to process the message from the chat client.
+                        const msg = {
+                            type: "message",
+                            token: token,
+                            messageType: messageType,
+                            timestamp: timestamp,
+                            id: ${Math.floor(Math.random() * 10000)}, // Random client ID for demonstration
+                            date: Date.now(),
+                        };
 
-    tokenSelect.addEventListener('change', function() {
-        messageTypeSelect.value = tokenSelect.value;
-    });
+                        // Collect additional form data
+                        const formData = new FormData(form);
+                        for (const [key, value] of formData.entries()) {
+                            msg[key] = value;
+                        }
 
-    const contentButton = document.createElement('button');
-    contentButton.type = 'button';
-    contentButton.innerText = 'Content';
-    contentButton.onclick = function() {
-        handleContentFields(form, messageTypeSelect.value);
-    };
-    form.appendChild(contentButton);
+                        // Send the msg object as a JSON-formatted string.
+                        const exampleSocket = new WebSocket('ws://your-websocket-server-url');
+                        exampleSocket.onopen = function() {
+                            exampleSocket.send(JSON.stringify(msg));
+                        };
 
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const message = {
-            sender: 'Web',
-            token: tokenSelect.value,
-            type: messageTypeSelect.value,
-            timestamp: timestampInput.value,
-            content: {}
-        };
-
-        if (messageTypeSelect.value === 'driving') {
-            message.content.driving_type = form.querySelector('[name="drivingType"]').value;
-            message.content.position = {
-                type: form.querySelector('[name="positionType"]').value,
-                name: form.querySelector('[name="stationName"]').value
-            };
-        } else if (messageTypeSelect.value === 'geolocation') {
-            message.content.altitude = form.querySelector('[name="altitude"]').value;
-            message.content.longitude = form.querySelector('[name="longitude"]').value;
-            message.content.position = {
-                type: form.querySelector('[name="stationType"]').value,
-                name: form.querySelector('[name="stationName"]').value
-            };
-        }
-
-        sendMessage(message);
-    });
-
-    modalContent.appendChild(form);
-    modal.appendChild(modalContent);
-    document.getElementById('modals-container').appendChild(modal);
-    modal.style.display = 'block';
-}
-
-function handleContentFields(form, messageType) {
-    const existingFields = form.querySelectorAll('.content-field');
-    existingFields.forEach(field => field.remove());
-
-    if (messageType === 'geolocation') {
-        const altitudeLabel = createLabel('Altitude:');
-        const altitudeInput = createInput('altitude');
-        altitudeInput.classList.add('content-field');
-        const longitudeLabel = createLabel('Longitude:');
-        const longitudeInput = createInput('longitude');
-        longitudeInput.classList.add('content-field');
-        const positionTypeLabel = createLabel('Station Type:');
-        const positionTypeSelect = createSelect('stationType', ['station', 'interstation']);
-        positionTypeSelect.classList.add('content-field');
-        const positionNameLabel = createLabel('Station Name:');
-        const positionNameInput = createInput('stationName');
-        positionNameInput.classList.add('content-field');
-        positionNameInput.style.marginBottom = '200px';
-
-        appendToContainer(form, altitudeLabel, altitudeInput, longitudeLabel, longitudeInput, positionTypeLabel, positionTypeSelect, positionNameLabel, positionNameInput);
-    } else if (messageType === 'driving') {
-        const drivingTypeLabel = createLabel('Driving Type:');
-        const drivingTypeSelect = createSelect('drivingType', ['calibrate', 'start', 'finish']);
-        drivingTypeSelect.classList.add('content-field');
-        const positionTypeLabel = createLabel('Position Type:');
-        const positionTypeSelect = createSelect('positionType', ['station', 'interstation']);
-        positionTypeSelect.classList.add('content-field');
-        const positionNameLabel = createLabel('Station Name:');
-        const positionNameInput = createInput('stationName');
-        positionNameInput.classList.add('content-field');
-        positionNameInput.style.marginBottom = '200px';
-
-        appendToContainer(form, drivingTypeLabel, drivingTypeSelect, positionTypeLabel, positionTypeSelect, positionNameLabel, positionNameInput);
+                        // Close the window after sending the message
+                        window.close();
+                    }
+                </script>
+            </body>
+            </html>
+        `);
+        modalWindow.document.close();
+    } else {
+        console.error("Failed to open new window.");
     }
-}
-
-function sendMessage(message) {
-    const ws = new WebSocket('ws://localhost:9999/ws');
-
-    ws.onopen = function() {
-        console.log('Connected to server');
-        ws.send(JSON.stringify(message));
-        console.log('Message sent');
-    };
-
-    ws.onmessage = function(event) {
-        console.log('Received data from server:', event.data);
-    };
-
-    ws.onclose = function(event) {
-        console.log('Connection closed:', event.code, event.reason);
-    };
-
-    ws.onerror = function(error) {
-        console.error('WebSocket error:', error);
-    };
-}
-
-function createLabel(text) {
-    const label = document.createElement('label');
-    label.innerText = text;
-    return label;
-}
-
-function createInput(name) {
-    const input = document.createElement('input');
-    input.name = name;
-    input.type = 'text';
-    return input;
-}
-
-function createSelect(name, options) {
-    const select = document.createElement('select');
-    select.name = name;
-    options.forEach(optionText => {
-        const option = document.createElement('option');
-        option.value = optionText;
-        option.innerText = optionText;
-        select.appendChild(option);
-    });
-    return select;
-}
-
-function appendToContainer(container, ...elements) {
-    elements.forEach(element => container.appendChild(element));
 }
