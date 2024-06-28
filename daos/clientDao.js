@@ -1,37 +1,36 @@
+const Dao = require('./dao.js');
 
-const sqlite3 = require('sqlite3').verbose();
+console.log(Dao)
 
-class Dao {
+class ClientDao  extends Dao  {
+
     constructor() {
-        this.db = new sqlite3.Database('dao/database.db');
+        super();
+
     }
 
-    /**
-     * Méthode pour obtenir la valeur d'une clé à partir de la base de données
-     * @param {string} key - La clé à rechercher dans la base de données
-     * @returns {Promise<any>} - Une Promise qui résout avec la valeur de la clé
-     */
-    getValueByKey(key) {
+
+     insert(name, token, expiredAt) {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT value FROM config WHERE key = ?';
-            this.db.get(sql, [key], (err, row) => {
+            db.run(`INSERT INTO clients (name, token, expired_at) VALUES (?, ?, ?)`,
+            [name, token, expiredAt], (err) => {
                 if (err) {
-                    reject(err);
-                } else if (row) {
-                    resolve(row.value);
+                console.error(`Error inserting client ${name}:`, err.message);
+                return reject(err);
                 } else {
-                    reject(new Error('Clé non trouvée'));
+                console.log(`Client ${name} inserted successfully`);
+                resolve();
                 }
             });
         });
-    }
-
+        }
+   
     /**
      * Méthode pour obtenir les informations d'un client à partir de son token
      * @param {string} token - Le token du client à rechercher
      * @returns {Promise<object>} - Une Promise qui résout avec les informations du client
      */
-    getClientByToken(token) {
+    getByToken(token) {
         return new Promise((resolve, reject) => {
             const sql = 'SELECT * FROM clients WHERE token = ?';
             this.db.get(sql, [token], (err, row) => {
@@ -49,7 +48,7 @@ class Dao {
                 }
             });
         });
-    }
+    } 
 }
 
-module.exports = Dao;
+module.exports = ClientDao;

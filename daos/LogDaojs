@@ -1,0 +1,13 @@
+const  Dao  = require('./dao');
+  
+class LogDao extends Dao {
+    
+    constructor() {
+        super();
+    }
+
+    // To Do 
+    // Add the log 
+
+}
+module.exports = LogDao;
