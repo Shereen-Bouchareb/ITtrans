@@ -1,8 +1,13 @@
 const Dao = require("./dao");
 
 class ConfigDao extends Dao {
+<<<<<<< HEAD
   constructor() {
     super();
+=======
+  constructor(db) {
+    super(db);
+>>>>>>> 67654bfe3fc7381b9eae45da3cfcfd11d62a16ba
   }
 
   insert(key, value) {
@@ -15,6 +20,10 @@ class ConfigDao extends Dao {
             console.error(`Error inserting config entry ${key}:`, err.message);
             reject(err);
           } else {
+<<<<<<< HEAD
+=======
+            console.log(`Config entry ${key} inserted successfully`);
+>>>>>>> 67654bfe3fc7381b9eae45da3cfcfd11d62a16ba
             resolve();
           }
         }
@@ -38,4 +47,8 @@ class ConfigDao extends Dao {
   }
 }
 
+<<<<<<< HEAD
 module.exports = ConfigDao;
+=======
+module.exports = ConfigDao;
+>>>>>>> 67654bfe3fc7381b9eae45da3cfcfd11d62a16ba

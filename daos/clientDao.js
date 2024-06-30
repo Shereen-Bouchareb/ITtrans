@@ -1,6 +1,7 @@
 const Dao = require("./dao");
 
 class ClientDao extends Dao {
+<<<<<<< HEAD
   constructor() {
     super();
   }
@@ -10,11 +11,26 @@ class ClientDao extends Dao {
       this.db.run(
         `INSERT INTO clients (name, token, expired_at) VALUES (?, ?, ?)`,
         [name, token, expired_at],
+=======
+  constructor(db) {
+    super(db);
+  }
+
+  insert(name, token, expiredAt) {
+    return new Promise((resolve, reject) => {
+      this.db.run(
+        `INSERT INTO clients (name, token, expired_at) VALUES (?, ?, ?)`,
+        [name, token, expiredAt],
+>>>>>>> 67654bfe3fc7381b9eae45da3cfcfd11d62a16ba
         (err) => {
           if (err) {
             console.error(`Error inserting client ${name}:`, err.message);
             reject(err);
           } else {
+<<<<<<< HEAD
+=======
+            console.log(`Client ${name} inserted successfully`);
+>>>>>>> 67654bfe3fc7381b9eae45da3cfcfd11d62a16ba
             resolve();
           }
         }
@@ -43,5 +59,9 @@ class ClientDao extends Dao {
   }
 }
 
+<<<<<<< HEAD
 
 module.exports = ClientDao;
+=======
+module.exports = ClientDao;
+>>>>>>> 67654bfe3fc7381b9eae45da3cfcfd11d62a16ba
