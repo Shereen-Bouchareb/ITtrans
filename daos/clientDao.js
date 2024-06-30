@@ -15,7 +15,6 @@ class ClientDao extends Dao {
             console.error(`Error inserting client ${name}:`, err.message);
             reject(err);
           } else {
-            console.log(`Client ${name} inserted successfully`);
             resolve();
           }
         }
@@ -43,5 +42,6 @@ class ClientDao extends Dao {
     });
   }
 }
+
 
 module.exports = ClientDao;

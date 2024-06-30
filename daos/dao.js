@@ -1,6 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 
-const DATABASE_PATH = "database.db";
+const DATABASE_PATH = `${__dirname}/database.db`;
 
 
 class Dao {
@@ -11,21 +11,21 @@ class Dao {
 
   createSchema() {
     this.db.serialize(() => {
-        this.db.run('DROP TABLE IF EXISTS clients'); 
-        this.db.run(`CREATE TABLE clients (
+      this.db.run('DROP TABLE IF EXISTS clients');
+      this.db.run(`CREATE TABLE clients (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
-                token TEXT UNIQUE NOT NULL,
+                token TEXT  NOT NULL,
                 expired_at INTEGER NOT NULL
             )`);
-        this.db.run('DROP TABLE IF EXISTS config');     
-        this.db.run(`CREATE TABLE config (
+      this.db.run('DROP TABLE IF EXISTS config');
+      this.db.run(`CREATE TABLE config (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 key TEXT UNIQUE NOT NULL,
                 value TEXT NOT NULL
             )`);
 
-      this.db.run('DROP TABLE IF EXISTS log'); 
+      this.db.run('DROP TABLE IF EXISTS log');
       this.db.run(`CREATE TABLE log (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 message TEXT NOT NULL,
@@ -41,19 +41,19 @@ class Dao {
       if (err) {
         console.error("Error closing the database:", err.message);
       } else {
-        console.log("Database connection closed");
+        // we close the database . 
       }
     });
-    }
-    
-    
-       
-        
-    }
-    
-  
+  }
+
+
+
+
+}
+
+
 
 
 module.exports = Dao;
- 
+
 

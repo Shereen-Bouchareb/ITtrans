@@ -15,7 +15,6 @@ class ConfigDao extends Dao {
             console.error(`Error inserting config entry ${key}:`, err.message);
             reject(err);
           } else {
-            console.log(`Config entry ${key} inserted successfully`);
             resolve();
           }
         }

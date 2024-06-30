@@ -9,14 +9,13 @@ class LogDao extends Dao {
     insert(message,sender,receiver,received_at) {
         return new Promise((resolve, reject) => {
             this.db.run(
-              `INSERT INTO config (key, value) VALUES (?, ?)`,
+              `INSERT INTO config (message,sender,receiver,received_at) VALUES (?,?,?,?)`,
               [message,sender,receiver,received_at],
               (err) => {
                 if (err) {
                   console.error(`Error inserting config entry ${key}:`, err.message);
                   reject(err);
                 } else {
-                  console.log(`Config entry ${key} inserted successfully`);
                   resolve();
                 }
               }
